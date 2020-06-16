@@ -1,0 +1,7 @@
+---
+singleQuote: true
+
+proseWrap: always
+
+trailingComma: es5
+arrowParens: always

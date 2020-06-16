@@ -1,0 +1,26 @@
+mixin eventForm(event = {})
+  form.form.card__shadow(action=`/events/add/${event._id || ''}` method='POST')
+    label(for='name') Event Name
+    input.validate(type='text' name='name' value=event.name required)
+    div.row
+      div.col.s6
+        label(for='startDate') Start Date 
+        input(type='date' name='startDate' value=event.startDate required)
+      div.col.s6
+        label(for='startTime') Start Time
+        input(type='time' name='startTime' value=event.startTime required)
+    div.row
+      div.col.s6
+        label(for='endDate') End Date
+        input(type='date' name='endDate' value=event.endDate required)
+      div.col.s6
+        label(for='endTime') End Time
+        input(type='time' name='endTime' value=event.endTime required)
+    label(for='address') Address
+    input(type='text' id='address' name='location[address]' value=(event.location && event.location.address))
+    input(type='text' id='lng' name='location[coordinates][0]' value=(event.location && event.location.coordinates[0]) style="display: none")
+    input(type='text' id='lat' name='location[coordinates][1]' value=(event.location && event.location.coordinates[1]) style="display: none")
+   
+    label(for='description') Event Description
+    textarea(name='description' value=event.description)
+    input(type='submit' value='Save' class='button')

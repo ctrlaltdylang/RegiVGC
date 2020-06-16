@@ -1,0 +1,19 @@
+extends layout
+
+include mixins/_eventForm
+
+block content
+  .inner
+    .single
+      h2.single--title= title
+      .single__details
+        .single__location 
+          span= event.location.address
+          p #{event.startDate} at #{event.startTime}
+        .single__description
+          p.bold Hosted by #{event.createdBy.username}
+          p= event.description
+        if user
+          .row
+            .col.right
+              a.event__button(href=`/event/${event.slug}/register` style="width: 100%") Register

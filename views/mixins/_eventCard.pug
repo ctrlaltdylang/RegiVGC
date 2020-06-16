@@ -1,0 +1,7 @@
+mixin eventCard(event = {})
+    .card.card__shadow.event
+      .card__content
+        h2.card__title
+          a(href=`/event/${event.slug}`) #{event.name}
+        p.bold Hosted by #{event.createdBy.username}
+        p= event.description.split(' ').slice(0, 25).join(' ')

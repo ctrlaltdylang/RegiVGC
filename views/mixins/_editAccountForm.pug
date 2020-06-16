@@ -1,0 +1,17 @@
+mixin editAccountForm()
+  form.form(action='/account' method='POST')
+    label(for='username') Username
+    input(type='text' name='username' value=user.username required)
+    label(for='email') Email
+    input(type='email' name='email' value=user.email required)
+    label(for='firstName') First Name
+    input(type='text' name='firstName' value=user.firstName)
+    label(for='lastName') Last Name
+    input(type='text' name='lastName' value=user.lastName)
+    label(for='popid') POPID
+    input(type='text' name='popid' value=user.popid)
+    label(for='switchProfileName') Switch Profile Name
+    input(type='text' name='switchProfileName' value=user.switchProfileName)
+    label(for='birthday') Birthday
+    input(type='date' name='birthday' value=user.birthday)
+    input.button(type='submit' value='Update')
