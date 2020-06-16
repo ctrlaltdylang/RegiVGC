@@ -12,19 +12,19 @@ const eventSchema = new Schema({
   slug: String,
   startDate: {
     type: String,
-    // required: 'Must specify when the event starts!',
+    required: 'Must specify when the event starts!',
   },
   startTime: {
     type: String,
-    // required: 'Must specify when the event starts!'
+    required: 'Must specify when the event starts!',
   },
   endDate: {
     type: String,
-    // required: 'Must specify when the event ends!',
+    required: 'Must specify when the event ends!',
   },
   endTime: {
     type: String,
-    // required: 'Must specify when the event starts!'
+    required: 'Must specify when the event starts!',
   },
   description: {
     type: String,
@@ -37,12 +37,12 @@ const eventSchema = new Schema({
   createdBy: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    // required: 'Events must be created by a User!',
+    required: 'Events must be created by a User!',
   },
   lastEditedBy: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    // required: 'Events must be edited by a User!',
+    required: 'Events must be edited by a User!',
   },
   location: {
     type: {
@@ -52,12 +52,10 @@ const eventSchema = new Schema({
     coordinates: [
       {
         type: Number,
-        // required: 'You must supply coordinates!',
       },
     ],
     address: {
       type: String,
-      // required: 'You must supply an address!',
     },
   },
   players: [
