@@ -14,6 +14,9 @@ block content
           p.bold Hosted by #{event.createdBy.username}
           p= event.description
         if user
-          .row
+          .row     
+            if currentUserCreated
+              .col.left
+                a.event__button(href=`/event/${event._id}/edit` style="width: 100%") Edit
             .col.right
-              a.event__button(href=`/event/${event.slug}/register` style="width: 100%") Register
+              a.event__button(href=`/event/${event.slug}/signup` style="width: 100%") Sign Up

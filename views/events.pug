@@ -7,8 +7,10 @@ block content
     h2= title
     if user
       .row
+        .col.left
+          a.event__button(href=`/events/user/${user._id}`) My Events
         .col.right
-            a.event__button(href="/events/add") Add Event
+          a.event__button(href="/events/add") Add Event
     .events
       each event in events
         +eventCard(event)

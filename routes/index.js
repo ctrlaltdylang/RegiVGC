@@ -10,9 +10,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/events', catchErrors(eventsController.listEvents));
+router.get('/events/user/:id', catchErrors(eventsController.userEvents));
 router.get('/event/:slug', catchErrors(eventsController.getEventBySlug));
+router.get('/event/:id/edit', catchErrors(eventsController.editEvent));
 router.get('/events/add', eventsController.addEvent);
-router.post('/events/add', eventsController.createEvent);
+router.post('/events/add', catchErrors(eventsController.createEvent));
+router.post('/events/add/:id', catchErrors(eventsController.updateEvent));
 
 router.get('/login', userController.loginForm);
 router.post('/login', authController.login);

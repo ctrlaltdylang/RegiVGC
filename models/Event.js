@@ -30,6 +30,10 @@ const eventSchema = new Schema({
     type: String,
     trim: true,
   },
+  public: {
+    type: Boolean,
+    default: false,
+  },
   created: {
     type: Date,
     default: Date.now,
