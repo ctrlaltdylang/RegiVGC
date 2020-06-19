@@ -22,7 +22,13 @@ router.get('/events/user/:id/page/:page', catchErrors(eventsController.userEvent
 // Event by Slug (single events)
 router.get('/event/:slug', catchErrors(eventsController.getEventBySlug));
 router.get('/event/:id/edit', catchErrors(eventsController.editEvent));
+
+// Players for Event
+router.get('/event/:id/players', catchErrors(eventsController.getPlayers));
+
+// Signup For Event
 router.get('/event/:slug/signup', catchErrors(eventsController.signup));
+router.post('/event/signup/:id', catchErrors(eventsController.signupForEvent));
 
 // Adding/Editing Events
 router.get('/events/add', eventsController.addEvent);

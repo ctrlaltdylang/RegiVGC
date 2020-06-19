@@ -97,8 +97,6 @@ exports.userEvents = async (req, res) => {
     return;
   }
 
-  console.log(count);
-
   const paginationUrl = `events/user/${req.params.id}`;
 
   res.render('events', { title: 'My Events', events, page, pages, count, paginationUrl });
@@ -108,6 +106,7 @@ exports.userEvents = async (req, res) => {
   GET
   Gets single event by slug, 
   Populated createdBy to get the creator's username
+  Checks to see if the signed in user created the event for View stuff
   Renders single event page
 */
 exports.getEventBySlug = async (req, res, next) => {
@@ -148,6 +147,40 @@ exports.updateEvent = async (req, res) => {
       <a href="/event/${event.slug}">View Event</a>`
   );
   res.redirect(`/events`);
+};
+
+// GET sign up for event page
+exports.signup = async (req, res, next) => {
+  const event = await Event.findOne({ slug: req.params.slug }).populate('createdBy');
+  if (!event) return next();
+  res.render('signup', { title: `Signup for ${event.name}`, event });
+};
+
+exports.signupForEvent = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id });
+
+  let newEvent = event;
+  const player = {
+    player_id: req.user._id,
+    team_id: null,
+    status: true,
+  };
+  if (!newEvent.players) {
+    newEvent.players = [];
+  }
+  newEvent.players.push(player);
+  const updatedEvent = await Event.findOneAndUpdate({ _id: req.params.id }, newEvent, {
+    new: true,
+    runValidators: true,
+  }).exec();
+  req.flash('success', `Successfully signed up for <strong>${updatedEvent.name}</strong>.`);
+  res.redirect(`/events`);
+};
+
+// GET Lists Players & their POPIDs, and birthday (for division)
+exports.getPlayers = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id }).populate('players.player_id');
+  res.render('players', { title: `Players in ${event.name}`, event });
 };
 
 /*

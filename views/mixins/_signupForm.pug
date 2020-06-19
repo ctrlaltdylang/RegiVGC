@@ -1,0 +1,5 @@
+mixin signupForm(event = {})
+  form.form.card__shadow(action=`/event/signup/${event._id}` method='POST')
+    label(for='name') Event Name
+    input.validate(type='text' name='name' value=user.username disabled)
+    input(type='submit' value='Signup!' class='button')
