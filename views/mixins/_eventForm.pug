@@ -6,18 +6,10 @@ mixin eventForm(event = {})
     div.row
       div.col.s6
         label(for='startDate') Start Date 
-        input(type='date' name='startDate' value=event.startDate required)
-      div.col.s6
-        label(for='startTime') Start Time
-        input(type='time' name='startTime' value=event.startTime required)
-
-    div.row
+        input(type='date' name='startDate' value=h.moment(event.startDate).format('YYYY-MM-DD') required)
       div.col.s6
         label(for='endDate') End Date
-        input(type='date' name='endDate' value=event.endDate required)
-      div.col.s6
-        label(for='endTime') End Time
-        input(type='time' name='endTime' value=event.endTime required)
+        input(type='date' name='endDate' value=h.moment(event.endDate).format('YYYY-MM-DD') required)
 
     label(for='address') Address
     input(type='text' id='address' name='location[address]' value=(event.location && event.location.address))
@@ -28,8 +20,9 @@ mixin eventForm(event = {})
     textarea(name='description' value=event.description)= event.description
 
     div.row
-      div.col.s6
+      div.col
         label.checkbox(for='public') Publicly Share Event?
         input.checkbox(type='checkbox' name='public' checked=event.public)
+        p= 'You will need to send players the link to your event if it is not publicly shared'
 
     input(type='submit' value='Save' class='button')

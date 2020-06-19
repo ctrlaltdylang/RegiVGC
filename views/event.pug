@@ -9,14 +9,19 @@ block content
       .single__details
         .single__location 
           span= event.location.address
-          p #{event.startDate} at #{event.startTime}
+          p= h.moment(event.startDate).format('LL')
         .single__description
           p.bold Hosted by #{event.createdBy.username}
           p= event.description
-        if user
-          .row     
+        if user    
             if currentUserCreated
-              .col.left
-                a.event__button(href=`/event/${event._id}/edit` style="width: 100%") Edit
-            .col.right
-              a.event__button(href=`/event/${event.slug}/signup` style="width: 100%") Sign Up
+              .row
+                .col.right
+                  a.event__button(href=`/event/${event._id}/edit`) Edit Details
+              .row.list
+                .col.right
+                  a.event__button(href=`/event/${event._id}/players`) See Players
+            else
+              .row
+                .col.right
+                  a.event__button(href=`/event/${event.slug}/signup`) Sign Up

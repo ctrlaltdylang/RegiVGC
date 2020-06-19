@@ -11,20 +11,12 @@ const eventSchema = new Schema({
   },
   slug: String,
   startDate: {
-    type: String,
-    required: 'Must specify when the event starts!',
-  },
-  startTime: {
-    type: String,
+    type: Date,
     required: 'Must specify when the event starts!',
   },
   endDate: {
-    type: String,
+    type: Date,
     required: 'Must specify when the event ends!',
-  },
-  endTime: {
-    type: String,
-    required: 'Must specify when the event starts!',
   },
   description: {
     type: String,
@@ -80,6 +72,10 @@ const eventSchema = new Schema({
 eventSchema.index({
   name: 'text',
   host: 'text',
+});
+
+eventSchema.index({
+  location: '2dsphere',
 });
 
 eventSchema.pre('save', async function (next) {

@@ -1,35 +1,115 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 const Event = mongoose.model('Event');
 
+/*  
+  Checks to see if the signed in user 
+  created the event 
+*/
 const confirmCreator = (event, user) => {
   if (!event.createdBy.equals(user._id)) {
     throw Error('You do not own this store, you must own a store to edit it.');
   }
 };
 
+// GET editEvent page
 exports.addEvent = (req, res) => {
   res.render('editEvent', { title: 'Create Event' });
 };
 
+/*
+  POST
+  Creates event, redirects user to All events page
+*/
 exports.createEvent = async (req, res) => {
   req.body.createdBy = req.user._id;
   req.body.lastEditedBy = req.user._id;
   req.body.created = Date.now();
+  req.body.public = req.body.public === 'on' ? true : false;
   const event = await new Event(req.body).save();
   req.flash('success', `Successfully Created <a href='/event/${event.slug}'>${event.name}</a> 🚀.`);
   res.redirect(`/events`);
 };
 
+/* 
+  GET 
+  All events that are public & start after yesterday (i.e start today)
+  Renders all events returned, pagination
+*/
 exports.listEvents = async (req, res) => {
-  const events = await Event.find({ public: true }).populate('createdBy');
-  res.render('events', { events, title: 'Upcoming Events' });
+  const page = req.params.page || 1;
+  const limit = 6;
+  const skip = page * limit - limit;
+
+  const totalEventsPromise = Event.find({
+    public: true,
+    startDate: { $gte: moment().subtract(1, 'days') },
+  });
+
+  const eventsPromise = Event.find({
+    public: true,
+    startDate: { $gte: moment().subtract(1, 'days') },
+  })
+    .populate('createdBy')
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' });
+
+  const [total, events] = await Promise.all([totalEventsPromise, eventsPromise]);
+
+  const count = total.length;
+
+  const pages = Math.ceil(count / limit);
+  if (!events.length && skip) {
+    res.redirect(`/events/page/${pages}`);
+    return;
+  }
+
+  const paginationUrl = 'events';
+  res.render('events', { title: 'Upcoming Events', events, page, pages, count, paginationUrl });
 };
 
+/* 
+  GET 
+  All events that are created by the signed in user
+  Renders user's events, pagination
+*/
 exports.userEvents = async (req, res) => {
-  const events = await Event.find({ createdBy: req.params.id }).populate('createdBy');
-  res.render('events', { events, title: 'My Events' });
+  const page = req.params.page || 1;
+  const limit = 6;
+  const skip = page * limit - limit;
+
+  const totalEventsPromise = Event.find({ createdBy: req.params.id });
+
+  const eventsPromise = Event.find({ createdBy: req.params.id })
+    .populate('createdBy')
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' });
+
+  const [total, events] = await Promise.all([totalEventsPromise, eventsPromise]);
+
+  const count = total.length;
+
+  const pages = Math.ceil(count / limit);
+  if (!events.length && skip) {
+    res.redirect(`/events/user/${req.params.id}/page/${pages}`);
+    return;
+  }
+
+  console.log(count);
+
+  const paginationUrl = `events/user/${req.params.id}`;
+
+  res.render('events', { title: 'My Events', events, page, pages, count, paginationUrl });
 };
 
+/*
+  GET
+  Gets single event by slug, 
+  Populated createdBy to get the creator's username
+  Renders single event page
+*/
 exports.getEventBySlug = async (req, res, next) => {
   const event = await Event.findOne({ slug: req.params.slug }).populate('createdBy');
   if (!event) return next();
@@ -37,12 +117,24 @@ exports.getEventBySlug = async (req, res, next) => {
   res.render('event', { event, currentUserCreated, title: event.name });
 };
 
+/*
+  GET
+  Gets single event by id, confirms signed in user created it
+  Renders editEvent page
+*/
 exports.editEvent = async (req, res) => {
   const event = await Event.findOne({ _id: req.params.id });
   confirmCreator(event, req.user);
   res.render('editEvent', { title: `Edit ${event.name}`, event });
 };
 
+/*
+  POST
+  Sets location type to Point for MongoDB shenanigans
+  Checkboxes are weird, so sets public to boolean instead of "on"
+  Updates event with data in body
+  Renders all Events page & flash
+*/
 exports.updateEvent = async (req, res) => {
   req.body.location.type = 'Point';
   req.body.public = req.body.public === 'on' ? true : false;
@@ -56,4 +148,39 @@ exports.updateEvent = async (req, res) => {
       <a href="/event/${event.slug}">View Event</a>`
   );
   res.redirect(`/events`);
+};
+
+/*
+  GET
+  API based Routes (no associated View, uses axios)
+  Searches for events that are within 100KM of location passed in, 
+    are public, and start after yesterday
+  Returns Events in json
+*/
+exports.nearbyEvents = async (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  const eventQuery = {
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates,
+        },
+        $maxDistance: 100000,
+      },
+    },
+    public: true,
+    startDate: { $gte: moment().subtract(1, 'days') },
+  };
+
+  const events = await Event.find(eventQuery)
+    .select('slug name description location createdBy')
+    .populate('createdBy')
+    .limit(10);
+  res.json(events);
+};
+
+// GET map page
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' });
 };

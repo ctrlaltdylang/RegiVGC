@@ -19,5 +19,5 @@ exports.siteName = `RegiVGC`;
 exports.menu = [
   { slug: '/events', title: 'Events', icon: 'events' },
   { slug: '/teams', title: 'Teams', icon: 'teams' },
-  { slug: '/map', title: 'Nearby', icon: 'map' },
+  { slug: '/nearby', title: 'Nearby', icon: 'map' },
 ];

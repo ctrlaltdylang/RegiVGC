@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
 function autocomplete(input, latInput, lngInput) {
-  if(!input) return;
+  if (!input) return;
 
   const dropdown = new google.maps.places.Autocomplete(input);
 
@@ -10,7 +11,7 @@ function autocomplete(input, latInput, lngInput) {
   });
 
   input.on('keydown', (e) => {
-    if(e.keyCode === 13) e.preventDefault();
+    if (e.keyCode === 13) e.preventDefault();
   });
 }
 
