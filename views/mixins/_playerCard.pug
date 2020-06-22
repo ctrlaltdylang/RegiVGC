@@ -13,5 +13,5 @@ mixin playerCard(player = {})
             p.bold Switch Profile Name
             p= player.player_id.switchProfileName
         .row(style="margin: 0.5rem")
-          a.player__button.right(href=`/event/${event._id}/edit`) Teamsheet
+          a.player__button.right(href=`/team/${player.team_id.slug}`) Teamsheet
           

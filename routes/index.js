@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const eventsController = require('../controllers/eventsController');
+const teamsController = require('../controllers/teamsController');
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const { catchErrors } = require('../handlers/errorHandlers');
@@ -38,6 +39,25 @@ router.post('/events/add/:id', catchErrors(eventsController.updateEvent));
 // Nearby/Google Maps Routes
 router.get('/nearby', eventsController.mapPage);
 router.get('/api/events/near', catchErrors(eventsController.nearbyEvents));
+
+/* Teams Routes */
+
+// All Teams
+router.get('/teams', teamsController.listTeams);
+router.get('/teams/page/:page', catchErrors(teamsController.listTeams));
+
+// Adding/Editing Teams
+router.get('/teams/add', teamsController.addTeam);
+router.post('/teams/add', catchErrors(teamsController.createTeam));
+router.post('/teams/add/:id', catchErrors(teamsController.updateTeam));
+
+// Team by Slug (single team)
+router.get('/team/:slug', catchErrors(teamsController.getTeamBySlug));
+router.get('/team/:id/edit', catchErrors(teamsController.editTeam));
+
+// Events By User
+router.get('/teams/user/:id', catchErrors(teamsController.userTeams));
+router.get('/teams/user/:id/page/:page', catchErrors(teamsController.userTeams));
 
 // Account Routes
 router.get('/account', authController.isLoggedIn, userController.account);

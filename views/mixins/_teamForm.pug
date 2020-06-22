@@ -1,0 +1,76 @@
+mixin teamForm(team = {})
+  form.form.card__shadow.team__form(action=`/teams/add/${team._id || ''}` method='POST')
+    label(for='name') Team Name
+    input.validate(type='text' name='name' value=team.name required)
+
+    .team
+      each pokemon, index in team.pokemon
+        .pokemon
+          .card.card__shadow(style="padding: 1rem 0;")
+            .row
+              .col.s6
+                label(for='species') Species
+                input(type='text' name='species' value=pokemon.species)
+              .col.s6
+                label(for='nickname') Name 
+                input(type='text' name='nickname' value=pokemon.nickname)
+            .row
+              .col.s6
+                label(for='level') Level 
+                input(type='number' name='level' value=pokemon.level)
+              .col.s6
+                label.checkbox(for='gigantimax') Gigantimax
+                - let value = pokemon.gigantimax ? index : 'X'
+                input.checkbox.gigantimax(type='checkbox' name='gigantimax' checked=pokemon.gigantimax value=value id='gigantimax' + index)
+            .row
+              .col.s6
+                label(for='ability') Ability 
+                input(type='text' name='ability' value=pokemon.ability)
+              .col.s6
+                label(for='heldItem') Held Item
+                input(type='text' name='heldItem' value=pokemon.heldItem)
+            .row(style="margin-bottom: 0;")
+              .col.s6
+                p.bold Moves
+            .row
+              .col.s6
+                input(type='text' name='move1' value=pokemon.move1)
+              .col.s6
+                input(type='text' name='move2' value=pokemon.move2)
+            .row
+              .col.s6
+                input(type='text' name='move3' value=pokemon.move3)
+              .col.s6
+                input(type='text' name='move4' value=pokemon.move4)
+            .row(style="margin-bottom: 0;")
+              .col.s6
+                p.bold Stats
+            .row
+              .col.s6
+                label(for='hp') HP 
+                input(type='number' name='hp' value=pokemon.hp)
+              .col.s6
+                label(for='attack') Attack 
+                input(type='number' name='attack' value=pokemon.attack)
+            .row
+              .col.s6
+                label(for='defense') Defense 
+                input(type='number' name='defense' value=pokemon.defense)
+              .col.s6
+                label(for='spAtk') Sp. Attack 
+                input(type='number' name='spAtk' value=pokemon.spAtk)
+            .row
+              .col.s6
+                label(for='spDef') Sp. Defense 
+                input(type='number' name='spDef' value=pokemon.spDef)
+              .col.s6
+                label(for='speed') Speed 
+                input(type='number' name='speed' value=pokemon.speed)
+
+    .row(style="margin-bottom: 0")
+      .col
+        label.checkbox(for='public') Publicly Share Team?
+        input.checkbox(type='checkbox' name='public' checked=team.public)
+        p= 'A team that is publicly shared can be viewed by anybody'
+
+    input(type='submit' value='Save' class='button')

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 const Event = mongoose.model('Event');
+const Team = mongoose.model('Team');
 
 /*  
   Checks to see if the signed in user 
@@ -8,7 +9,7 @@ const Event = mongoose.model('Event');
 */
 const confirmCreator = (event, user) => {
   if (!event.createdBy.equals(user._id)) {
-    throw Error('You do not own this store, you must own a store to edit it.');
+    throw Error('You do not create this event, you must have created an event to edit it.');
   }
 };
 
@@ -44,7 +45,7 @@ exports.listEvents = async (req, res) => {
   const totalEventsPromise = Event.find({
     public: true,
     startDate: { $gte: moment().subtract(1, 'days') },
-  });
+  }).count();
 
   const eventsPromise = Event.find({
     public: true,
@@ -55,9 +56,7 @@ exports.listEvents = async (req, res) => {
     .limit(limit)
     .sort({ created: 'desc' });
 
-  const [total, events] = await Promise.all([totalEventsPromise, eventsPromise]);
-
-  const count = total.length;
+  const [count, events] = await Promise.all([totalEventsPromise, eventsPromise]);
 
   const pages = Math.ceil(count / limit);
   if (!events.length && skip) {
@@ -112,7 +111,7 @@ exports.userEvents = async (req, res) => {
 exports.getEventBySlug = async (req, res, next) => {
   const event = await Event.findOne({ slug: req.params.slug }).populate('createdBy');
   if (!event) return next();
-  const currentUserCreated = event.createdBy.equals(req.user._id);
+  const currentUserCreated = req.user ? event.createdBy.equals(req.user._id) : null;
   res.render('event', { event, currentUserCreated, title: event.name });
 };
 
@@ -137,6 +136,7 @@ exports.editEvent = async (req, res) => {
 exports.updateEvent = async (req, res) => {
   req.body.location.type = 'Point';
   req.body.public = req.body.public === 'on' ? true : false;
+  req.body.lastEditedBy = req.user._id;
   const event = await Event.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
     runValidators: true,
@@ -151,9 +151,10 @@ exports.updateEvent = async (req, res) => {
 
 // GET sign up for event page
 exports.signup = async (req, res, next) => {
-  const event = await Event.findOne({ slug: req.params.slug }).populate('createdBy');
+  const event = await Event.findOne({ slug: req.params.slug });
+  const teams = await Team.find({ createdBy: req.user._id });
   if (!event) return next();
-  res.render('signup', { title: `Signup for ${event.name}`, event });
+  res.render('signup', { title: `Signup for ${event.name}`, event, teams });
 };
 
 exports.signupForEvent = async (req, res) => {
@@ -162,7 +163,7 @@ exports.signupForEvent = async (req, res) => {
   let newEvent = event;
   const player = {
     player_id: req.user._id,
-    team_id: null,
+    team_id: req.body.team,
     status: true,
   };
   if (!newEvent.players) {
@@ -179,7 +180,9 @@ exports.signupForEvent = async (req, res) => {
 
 // GET Lists Players & their POPIDs, and birthday (for division)
 exports.getPlayers = async (req, res) => {
-  const event = await Event.findOne({ _id: req.params.id }).populate('players.player_id');
+  const event = await Event.findOne({ _id: req.params.id }).populate(
+    'players.player_id players.team_id'
+  );
   res.render('players', { title: `Players in ${event.name}`, event });
 };
 

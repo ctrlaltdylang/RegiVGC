@@ -7,23 +7,31 @@ const teamSchema = new Schema({
   createdBy: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    // required: 'Teams must be owned by a user!',
+    required: 'Teams must be owned by a user!',
   },
   name: {
     type: String,
     trim: true,
-    // required: 'Team must have a name!',
+    required: 'Team must have a name!',
   },
   slug: String,
   public: {
     type: Boolean,
     default: false,
   },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  lastEdited: {
+    type: Date,
+    default: Date.now,
+  },
   pokemon: [
     {
       species: {
         type: String,
-        // required: 'Must have a species!',
+        required: 'Must have a species!',
       },
       nickname: String,
       gigantimax: {
@@ -32,37 +40,37 @@ const teamSchema = new Schema({
       },
       level: {
         type: Number,
-        // required: 'Must have a level!',
+        required: 'Must have a level!',
       },
       ability: {
         type: String,
-        // required: 'Must have an ability!',
+        required: 'Must have an ability!',
       },
       heldItem: String,
       moves: [String],
       hp: {
         type: Number,
-        // required: 'Must have an HP stat!',
+        required: 'Must have an HP stat!',
       },
       attack: {
         type: Number,
-        // required: 'Must have an attack stat!',
+        required: 'Must have an attack stat!',
       },
       defense: {
         type: Number,
-        // required: 'Must have a defense stat!',
+        required: 'Must have a defense stat!',
       },
       spAtk: {
         type: Number,
-        // required: 'Must have a special attack stat!',
+        required: 'Must have a special attack stat!',
       },
       spDef: {
         type: Number,
-        // required: 'Must have a special defense stat!',
+        required: 'Must have a special defense stat!',
       },
       speed: {
         type: Number,
-        // required: 'Must have a speed stat!',
+        required: 'Must have a speed stat!',
       },
     },
   ],

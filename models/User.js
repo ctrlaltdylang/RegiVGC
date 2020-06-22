@@ -44,12 +44,6 @@ const userSchema = new Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  teams: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Team',
-    },
-  ],
   placements: [{ type: mongoose.Schema.ObjectId, ref: 'Placement' }],
 });
 

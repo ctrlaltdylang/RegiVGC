@@ -1,0 +1,12 @@
+mixin teamCard(team = {})
+    .card.card__shadow.pokemon
+      .card__content
+        h2.pokemon__title
+          a(href=`/teams/${team.slug}`) #{team.name}
+        p.bold Created by #{team.createdBy.username}
+        .team
+          each pokemon in team.pokemon
+            p.pokemon__name= pokemon.species
+        .row(style="margin-top: 2rem;")
+          .col.right
+            a.pokemon__button(href=`/team/${team.slug}`) View Team
