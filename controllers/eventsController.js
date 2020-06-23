@@ -112,7 +112,16 @@ exports.getEventBySlug = async (req, res, next) => {
   const event = await Event.findOne({ slug: req.params.slug }).populate('createdBy');
   if (!event) return next();
   const currentUserCreated = req.user ? event.createdBy.equals(req.user._id) : null;
-  res.render('event', { event, currentUserCreated, title: event.name });
+  let registered;
+  if (req.user) {
+    const players = event.players.filter((player) => {
+      return player.player_id.toString() == req.user._id.toString();
+    });
+    registered = players.length > 0 ? true : false;
+  } else {
+    registered = false;
+  }
+  res.render('event', { event, currentUserCreated, registered, title: event.name });
 };
 
 /*
@@ -154,7 +163,8 @@ exports.signup = async (req, res, next) => {
   const event = await Event.findOne({ slug: req.params.slug });
   const teams = await Team.find({ createdBy: req.user._id });
   if (!event) return next();
-  res.render('signup', { title: `Signup for ${event.name}`, event, teams });
+  const url = `/event/signup/${event._id}`;
+  res.render('signup', { title: `Signup for ${event.name}`, event, teams, url });
 };
 
 exports.signupForEvent = async (req, res) => {
@@ -178,12 +188,81 @@ exports.signupForEvent = async (req, res) => {
   res.redirect(`/events`);
 };
 
-// GET Lists Players & their POPIDs, and birthday (for division)
+// GET Lists Players & their POPIDs
 exports.getPlayers = async (req, res) => {
   const event = await Event.findOne({ _id: req.params.id }).populate(
     'players.player_id players.team_id'
   );
   res.render('players', { title: `Players in ${event.name}`, event });
+};
+
+// GET Lists events the signed in user is registered for
+exports.registeredEvents = async (req, res) => {
+  const events = await Event.find({ 'players.player_id': req.params.user_id }).populate(
+    'createdBy'
+  );
+  res.render('events', { title: 'Registered Events', events });
+};
+
+// GET unregister page
+exports.unregister = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id });
+  const player = event.players.filter((player) => {
+    return player.player_id.toString() === req.user._id.toString();
+  });
+  const team = await Team.findOne({ _id: player[0].team_id });
+  res.render('unregister', { title: `Unregister for ${event.name}`, event, team });
+};
+
+// POST Unregisters player from event
+exports.unregisterPlayer = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id });
+  const newEvent = event;
+  newEvent.players.splice(
+    newEvent.players.findIndex((item) => item.player_id.toString() === req.user._id.toString()),
+    1
+  );
+  await Event.findOneAndUpdate({ _id: req.params.id }, newEvent, {
+    new: true,
+    runValidators: true,
+  }).exec();
+  req.flash('success', `Successfully unregistered for <strong>${event.name}</strong>.`);
+  res.redirect(`/events`);
+};
+
+// GET sign up for event page
+exports.editRegistration = async (req, res, next) => {
+  const event = await Event.findOne({ _id: req.params.id });
+  const teams = await Team.find({ createdBy: req.user._id });
+  if (!event) return next();
+  const url = `/event/registration/${event._id}/${req.user._id}`;
+  res.render('signup', { title: `Register for ${event.name}`, event, teams, url });
+};
+
+exports.updateRegistration = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id });
+
+  let newEvent = event;
+  const player = {
+    player_id: req.user._id,
+    team_id: req.body.team,
+    status: true,
+  };
+
+  newEvent.players.splice(
+    newEvent.players.findIndex((item) => item.player_id.toString() === req.user._id.toString()),
+    1
+  );
+  newEvent.players.push(player);
+  const updatedEvent = await Event.findOneAndUpdate({ _id: req.params.id }, newEvent, {
+    new: true,
+    runValidators: true,
+  }).exec();
+  req.flash(
+    'success',
+    `Successfully updated registration for <strong>${updatedEvent.name}</strong>.`
+  );
+  res.redirect(`/events`);
 };
 
 /*

@@ -23,6 +23,9 @@ html
                   span #{item.title}
           .nav__section.nav__section--user
             if user
+              li.nav__item: a.nav__link(href="/support", class=(currentPath.startsWith('/support') ? 'nav__link--active' : ''))
+                != h.icon('support')
+                span Support
               li.nav__item: a.nav__link(href="/logout", class=(currentPath.startsWith('/logout') ? 'nav__link--active' : ''))
                 != h.icon('logout')
                 span Logout

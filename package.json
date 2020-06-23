@@ -1,7 +1,7 @@
 {
   "name": "regivgc",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pokemon VGC Registration Platform & Teambuilder",
   "engines": {
     "node": ">= 7.6.0"
   },
@@ -11,7 +11,8 @@
     "start": "node ./start.js",
     "watch": "nodemon ./start.js --ignore public/",
     "dev": "concurrently 'npm run watch' 'npm run assets' --names '💻,📦' --prefix name",
-    "assets": "webpack -w --display-max-modules 0"
+    "assets": "webpack -w --display-max-modules 0",
+    "deleteTestData": "node ./scripts/delete-testing-data.js"
   },
   "keywords": [],
   "author": "",

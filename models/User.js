@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+// eslint-disable-next-line no-unused-vars
 const md5 = require('md5');
 const validator = require('validator');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
@@ -33,11 +34,6 @@ const userSchema = new Schema({
   },
   popid: String,
   switchProfileName: String,
-  birthday: String,
-  created: {
-    type: Date,
-    default: Date.now,
-  },
   edited: {
     type: Date,
     default: Date.now,

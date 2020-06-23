@@ -8,12 +8,18 @@ mixin registerForm()
     input(type='text' name='firstName' required)
     label(for='lastName') Last Name
     input(type='text' name='lastName' required)
-    label(for='birthday') Birthday
-    input(type='date' name='birthday' required)
     label(for='switchProfileName') Switch Profile Name
-    input(type='date' name='switchProfileName' required)
+    input(type='text' name='switchProfileName' required)
     label(for='password') Password
     input(type='password' name='password' required)
     label(for='password-confirm') Confirm Password
     input(type='password' name='password-confirm' required)
     input.button(type='submit' value='Register')
+    div(style='margin-top:1rem;')
+      span By creating an account, you are agreeing that you have read and agree to the following:
+      br
+      ul
+        li
+          a.link(href='/privacy') Privacy Policy
+        li
+          a.link(href='/terms') Terms of Service

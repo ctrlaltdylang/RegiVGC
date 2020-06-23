@@ -10,8 +10,10 @@ block content
         if user    
           if currentUserCreated
             .row
-              .col.right
+              .col.left
                 a.event__button(href=`/team/${team._id}/edit`) Edit Team
+              .col.right
+                a.event__button(href=`/team/${team._id}/delete`) Delete Team
         .team
           each pokemon in team.pokemon
             .individual.card.card__shadow

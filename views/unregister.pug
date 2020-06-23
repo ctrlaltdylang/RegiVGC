@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  .inner
+    h2= title
+    form.form.card__shadow(action=`/event/unregister/${event._id}/${user._id}` method='POST')
+      label Are you sure you want to unregister for this #{event.name}?
+      label You are currently registered with team #{team.name}.
+      p If you would like to change the team you are registered with #[a.event__button(href="/") click here]
+      input(type='submit' value='Unregister' class='button')

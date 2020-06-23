@@ -3,3 +3,4 @@ npm-debug.log
 README.md
 .editorconfig
 .git/
+variables.env

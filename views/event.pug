@@ -24,4 +24,9 @@ block content
             else
               .row
                 .col.right
-                  a.event__button(href=`/event/${event.slug}/signup`) Sign Up
+                  if registered
+                    a.event__button(href=`/event/unregister/${event._id}/${user._id}`) Unregister
+                    .col
+                      a.event__button(href=`/event/registration/${event._id}/${user._id}/`) Change Registration
+                  else
+                    a.event__button(href=`/event/${event.slug}/signup`) Sign Up

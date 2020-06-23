@@ -1,5 +1,5 @@
 mixin signupForm(event = {})
-  form.form.card__shadow(action=`/event/signup/${event._id}` method='POST')
+  form.form.card__shadow(action=`${url}` method='POST')
     label(for='name') Player Name
     input.validate(type='text' name='name' value=user.firstName + ' ' + user.lastName disabled)
     label(for='team') Choose a team: 

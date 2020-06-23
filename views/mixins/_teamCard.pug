@@ -2,7 +2,7 @@ mixin teamCard(team = {})
     .card.card__shadow.pokemon
       .card__content
         h2.pokemon__title
-          a(href=`/teams/${team.slug}`) #{team.name}
+          a(href=`/team/${team.slug}`) #{team.name}
         p.bold Created by #{team.createdBy.username}
         .team
           each pokemon in team.pokemon

@@ -10,6 +10,8 @@ block content
       .row
         if title === 'Upcoming Events'
           .col.left
+            a.event__button(href=`/events/registrations/${user._id}`) My Registrations
+          .col.left
             a.event__button(href=`/events/user/${user._id}`) My Events
         .col.right
           a.event__button(href="/events/add") Add Event

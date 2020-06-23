@@ -41,6 +41,7 @@ exports.register = async (req, res, next) => {
     username: req.body.username,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
+    switchProfileName: req.body.switchProfileName,
   });
   await User.register(user, req.body.password);
   next();
@@ -58,7 +59,6 @@ exports.updateAccount = async (req, res) => {
     lastName: req.body.lastName,
     popid: req.body.popid,
     switchProfileName: req.body.switchProfileName,
-    birthday: req.body.birthday,
   };
 
   // eslint-disable-next-line no-unused-vars

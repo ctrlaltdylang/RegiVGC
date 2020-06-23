@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Team = mongoose.model('Team');
+const Event = mongoose.model('Event');
 
 /*  
   Checks to see if the signed in user 
@@ -215,7 +216,8 @@ exports.createTeam = async (req, res) => {
   newTeam.pokemon = buildTeam(req);
   const team = await new Team(newTeam).save();
 
-  req.flash('success', `Successfully Created <a href='/teams/${team.slug}'>${team.name}</a> 👍.`);
+  req.flash('success', `Successfully Created <a href='/team/${team.slug}'>${team.name}</a> 👍.`);
+  console.log();
   res.redirect(`/teams`);
 };
 
@@ -270,4 +272,28 @@ exports.updateTeam = async (req, res) => {
       <a href="/team/${team.slug}">View Team</a>`
   );
   res.redirect(`/teams`);
+};
+
+exports.deleteTeam = async (req, res) => {
+  const team = await Team.findOne({ _id: req.params.id });
+
+  res.render('deleteTeam', { title: 'Delete Team', team });
+};
+
+exports.delete = async (req, res) => {
+  const events = await Event.find({ 'players.team_id': req.params.id });
+  if (events.length > 0) {
+    req.flash(
+      'error',
+      `Cannot delete team, it is currently registered for an event. 
+        Check your registrations to see what event it is registered for, then unregister.
+        <a href="/events/registrations/${req.user._id}">View Registrations</a>`
+    );
+    console.log();
+    res.redirect(`/teams`);
+  } else {
+    await Team.deleteOne({ _id: req.params.id });
+    req.flash('success', 'Deleted team successfully!');
+    res.redirect(`/teams`);
+  }
 };

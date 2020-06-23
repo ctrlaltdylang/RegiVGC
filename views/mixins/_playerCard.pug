@@ -7,9 +7,6 @@ mixin playerCard(player = {})
             p.bold.inline Player ID: 
             p.inline= player.player_id.popid
           .player__details--row
-            p.bold.inline Birthday: 
-            p.inline= h.moment(player.player_id.birthday).format("MMM Do YYYY")
-          .player__details--row
             p.bold Switch Profile Name
             p= player.player_id.switchProfileName
         .row(style="margin: 0.5rem")

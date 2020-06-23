@@ -1,0 +1,10 @@
+extends layout
+
+
+block content
+  .inner
+    h2 Delete #{ team.name }?
+    form.form.card__shadow(action=`/team/${team._id}/delete` method='POST')
+      label Are you sure you want to delete this team?
+      label You cannot delete a team that is registered for an event
+      input(type='submit' value=`Delete ${team.name}` class='button')

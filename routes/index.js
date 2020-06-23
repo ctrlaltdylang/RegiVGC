@@ -10,6 +10,14 @@ router.get('/', (req, res) => {
   res.render('index', { title: 'Home' });
 });
 
+router.get('/privacy', (req, res) => {
+  res.render('privacy', { title: 'Privacy Policy' });
+});
+
+router.get('/terms', (req, res) => {
+  res.render('terms', { title: 'Terms of Service' });
+});
+
 /* Event Routes */
 
 // All Events
@@ -30,6 +38,17 @@ router.get('/event/:id/players', catchErrors(eventsController.getPlayers));
 // Signup For Event
 router.get('/event/:slug/signup', catchErrors(eventsController.signup));
 router.post('/event/signup/:id', catchErrors(eventsController.signupForEvent));
+
+// Unregister for Event
+router.get('/event/unregister/:id/:player', catchErrors(eventsController.unregister));
+router.post('/event/unregister/:id/:player', catchErrors(eventsController.unregisterPlayer));
+
+// Edit registration for Event
+router.get('/event/registration/:id/:player/', catchErrors(eventsController.editRegistration));
+router.post('/event/registration/:id/:player/', catchErrors(eventsController.updateRegistration));
+
+// See Registered Events
+router.get('/events/registrations/:user_id', catchErrors(eventsController.registeredEvents));
 
 // Adding/Editing Events
 router.get('/events/add', eventsController.addEvent);
@@ -55,9 +74,13 @@ router.post('/teams/add/:id', catchErrors(teamsController.updateTeam));
 router.get('/team/:slug', catchErrors(teamsController.getTeamBySlug));
 router.get('/team/:id/edit', catchErrors(teamsController.editTeam));
 
-// Events By User
+// Teams By User
 router.get('/teams/user/:id', catchErrors(teamsController.userTeams));
 router.get('/teams/user/:id/page/:page', catchErrors(teamsController.userTeams));
+
+// Delete Team
+router.get('/team/:id/delete', catchErrors(teamsController.deleteTeam));
+router.post('/team/:id/delete', catchErrors(teamsController.delete));
 
 // Account Routes
 router.get('/account', authController.isLoggedIn, userController.account);
