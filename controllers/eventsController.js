@@ -265,6 +265,20 @@ exports.updateRegistration = async (req, res) => {
   res.redirect(`/events`);
 };
 
+// GET Delete Page
+exports.deleteEvent = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id });
+  res.render('deleteEvent', { title: `Delete ${event.name}`, event });
+};
+
+// POST Delete Event
+exports.delete = async (req, res) => {
+  await Event.deleteOne({ _id: req.params.id });
+  console.log();
+  req.flash('success', 'Deleted event successfully!');
+  res.redirect(`/events`);
+};
+
 /*
   GET
   API based Routes (no associated View, uses axios)

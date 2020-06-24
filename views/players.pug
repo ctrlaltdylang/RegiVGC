@@ -3,8 +3,7 @@ extends layout
 include mixins/_playerCard
 
 block content
-  .inner
-    h2= title
-    .players
-      each player in event.players
-        +playerCard(player)
+  h2= title
+  .players
+    each player in event.players
+      +playerCard(player)

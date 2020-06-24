@@ -3,74 +3,73 @@ extends layout
 include mixins/_teamForm
 
 block content
-  .inner
-    .single
-      h2.single--title= title
-      .single__details
-        if user    
-          if currentUserCreated
-            .row
-              .col.left
-                a.event__button(href=`/team/${team._id}/edit`) Edit Team
-              .col.right
-                a.event__button(href=`/team/${team._id}/delete`) Delete Team
-        .team
-          each pokemon in team.pokemon
-            .individual.card.card__shadow
-              .individual__details
-                .row
-                  .col.s6
-                    p.bold= pokemon.species
-                  .col.s6
-                    p= pokemon.name
-                .row
-                  .col.s6
-                    p.bold Level
-                    p= pokemon.level
-                  .col.s6
-                    label.checkbox(for='gigantimax') Gigantimax
-                    input.checkbox(type='checkbox' name='gigantimax' checked=pokemon.gigantimax disabled)
-                .row
-                  .col.s6
-                    p.bold Ability
-                    p= pokemon.ability
-                  .col.s6
-                    p.bold Held Item
-                    p= pokemon.heldItem
-                .row(style="margin-bottom: 0;")
-                  .col.s6
-                    p.bold Moves
-                .row(style="margin-bottom: 0;")
-                  .col.s6
-                    p= pokemon.moves[0]
-                  .col.s6 
-                    p= pokemon.moves[1]
-                .row(style="margin-bottom: 0;")
-                  .col.s6
-                    p= pokemon.moves[2]
-                  .col.s6 
-                    p= pokemon.moves[3]
-                .row(style="margin-bottom: 0;")
-                  .col.s6
-                    p.bold Stats
-                .row
-                  .col.s6
-                    p.bold HP
-                    p= pokemon.hp
-                  .col.s6
-                    p.bold Attack
-                    p= pokemon.attack
-                .row
-                  .col.s6
-                    p.bold Defense
-                    p= pokemon.defense
-                  .col.s6
-                    p.bold Sp. Attack
-                    p= pokemon.spAtk
-                .row
-                  .col.s6
-                    p.bold Sp. Defense
-                    p= pokemon.spDef
-                  .col.s6
-                    p.bold Speed
-                    p= pokemon.speed
+  .single
+    h2.single--title= title
+    .single__details
+      if user    
+        if currentUserCreated
+          .row
+            .col.left
+              a.event__button(href=`/team/${team._id}/edit`) Edit Team
+            .col.right
+              a.event__button(href=`/team/${team._id}/delete`) Delete Team
+      .team
+        each pokemon in team.pokemon
+          .individual.card.card__shadow
+            .individual__details
+              .row
+                .col.s6
+                  p.bold= pokemon.species
+                .col.s6
+                  p= pokemon.name
+              .row
+                .col.s6
+                  p.bold Level
+                  p= pokemon.level
+                .col.s6
+                  label.checkbox(for='gigantimax') Gigantimax
+                  input.checkbox(type='checkbox' name='gigantimax' checked=pokemon.gigantimax disabled)
+              .row
+                .col.s6
+                  p.bold Ability
+                  p= pokemon.ability
+                .col.s6
+                  p.bold Held Item
+                  p= pokemon.heldItem
+              .row(style="margin-bottom: 0;")
+                .col.s6
+                  p.bold Moves
+              .row(style="margin-bottom: 0;")
+                .col.s6
+                  p= pokemon.moves[0]
+                .col.s6 
+                  p= pokemon.moves[1]
+              .row(style="margin-bottom: 0;")
+                .col.s6
+                  p= pokemon.moves[2]
+                .col.s6 
+                  p= pokemon.moves[3]
+              .row(style="margin-bottom: 0;")
+                .col.s6
+                  p.bold Stats
+              .row
+                .col.s6
+                  p.bold HP
+                  p= pokemon.hp
+                .col.s6
+                  p.bold Attack
+                  p= pokemon.attack
+              .row
+                .col.s6
+                  p.bold Defense
+                  p= pokemon.defense
+                .col.s6
+                  p.bold Sp. Attack
+                  p= pokemon.spAtk
+              .row
+                .col.s6
+                  p.bold Sp. Defense
+                  p= pokemon.spDef
+                .col.s6
+                  p.bold Speed
+                  p= pokemon.speed

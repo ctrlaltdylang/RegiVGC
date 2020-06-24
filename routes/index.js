@@ -55,6 +55,10 @@ router.get('/events/add', eventsController.addEvent);
 router.post('/events/add', catchErrors(eventsController.createEvent));
 router.post('/events/add/:id', catchErrors(eventsController.updateEvent));
 
+// Deleting Events
+router.get('/event/:id/delete', eventsController.deleteEvent);
+router.post('/event/:id/delete', catchErrors(eventsController.delete));
+
 // Nearby/Google Maps Routes
 router.get('/nearby', eventsController.mapPage);
 router.get('/api/events/near', catchErrors(eventsController.nearbyEvents));

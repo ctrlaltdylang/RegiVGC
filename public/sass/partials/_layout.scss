@@ -6,6 +6,10 @@ body {
   background:#ececec;
 }
 
+html, body {
+  height: 100%;
+}
+
 .inner {
   max-width:900px;
   margin: 0 auto;
@@ -15,4 +19,24 @@ body {
   &--flashes {
     padding:0;
   }
+}
+
+.main {
+  height:auto !important;
+  min-height:94%;
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  height: 5rem;
+  display: flex;
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.footer > a {
+  margin: 0 1rem;
+  color: $black;
 }

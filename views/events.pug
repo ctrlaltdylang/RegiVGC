@@ -4,18 +4,17 @@ include mixins/_eventCard
 include mixins/_pagination
 
 block content
-  .inner
-    h2= title
-    if user
-      .row
-        if title === 'Upcoming Events'
-          .col.left
-            a.event__button(href=`/events/registrations/${user._id}`) My Registrations
-          .col.left
-            a.event__button(href=`/events/user/${user._id}`) My Events
-        .col.right
-          a.event__button(href="/events/add") Add Event
-    .events
-      each event in events
-        +eventCard(event)
-    +pagination(page, pages, count, paginationUrl)
+  h2= title
+  if user
+    .row
+      if title === 'Upcoming Events'
+        .col.left
+          a.event__button(href=`/events/registrations/${user._id}`) My Registrations
+        .col.left
+          a.event__button(href=`/events/user/${user._id}`) My Events
+      .col.right
+        a.event__button(href="/events/add") Add Event
+  .events
+    each event in events
+      +eventCard(event)
+  +pagination(page, pages, count, paginationUrl)

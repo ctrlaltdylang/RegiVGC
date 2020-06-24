@@ -3,30 +3,32 @@ extends layout
 include mixins/_eventForm
 
 block content
-  .inner
-    .single
-      h2.single--title= title
-      .single__details
-        .single__location 
-          span= event.location.address
-          p= h.moment(event.startDate).format('LL')
-        .single__description
-          p.bold Hosted by #{event.createdBy.username}
-          p= event.description
-        if user    
-            if currentUserCreated
-              .row
-                .col.right
-                  a.event__button(href=`/event/${event._id}/edit`) Edit Details
-              .row.list
-                .col.right
-                  a.event__button(href=`/event/${event._id}/players`) See Players
-            else
-              .row
-                .col.right
-                  if registered
-                    a.event__button(href=`/event/unregister/${event._id}/${user._id}`) Unregister
-                    .col
-                      a.event__button(href=`/event/registration/${event._id}/${user._id}/`) Change Registration
-                  else
-                    a.event__button(href=`/event/${event.slug}/signup`) Sign Up
+  .single
+    h2.single--title= title
+    .single__details
+      .single__location 
+        span= event.location.address
+        p= h.moment(event.startDate).format('LL')
+      .single__description
+        p.bold Hosted by #{event.createdBy.username}
+        p= event.description
+      if user    
+          if currentUserCreated
+            .row
+              .col.right
+                a.event__button(href=`/event/${event._id}/edit`) Edit Details
+            .row.list
+              .col.right
+                a.event__button(href=`/event/${event._id}/players`) See Players
+            .row.list
+              .col.right
+                a.event__button(href=`/event/${event._id}/delete`) Delete Event
+          else
+            .row
+              .col.right
+                if registered
+                  a.event__button(href=`/event/unregister/${event._id}/${user._id}`) Unregister
+                  .col
+                    a.event__button(href=`/event/registration/${event._id}/${user._id}/`) Change Registration
+                else
+                  a.event__button(href=`/event/${event.slug}/signup`) Sign Up

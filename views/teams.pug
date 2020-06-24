@@ -4,16 +4,15 @@ include mixins/_teamCard
 include mixins/_pagination
 
 block content
-  .inner
-    h2= title
-    if user
-      .row
-        if title === 'Teams'
-          .col.left
-            a.event__button(href=`/teams/user/${user._id}`) My Teams
-        .col.right
-          a.event__button(href="/teams/add") Create Team
-    .team
-      each team in teams
-        +teamCard(team)
-    +pagination(page, pages, count, paginationUrl)
+  h2= title
+  if user
+    .row
+      if title === 'Teams'
+        .col.left
+          a.event__button(href=`/teams/user/${user._id}`) My Teams
+      .col.right
+        a.event__button(href="/teams/add") Create Team
+  .team
+    each team in teams
+      +teamCard(team)
+  +pagination(page, pages, count, paginationUrl)
