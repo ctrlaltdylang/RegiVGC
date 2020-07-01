@@ -33,7 +33,7 @@ Uses the following tools to lint & enforce code style:
 
 ## Debugging
 
-To instart debugging, run `npm run debug` in the root directory of the project.
+To start debugging, run `npm run dev` in the root directory of the project.
 
 ## Contributing
 
